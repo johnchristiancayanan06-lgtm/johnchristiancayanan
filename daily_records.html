@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Daily Records</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+    <style>
+        /* Top Controls */
+        .top-controls {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        #exportBtn {
+            padding: 8px 16px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        #exportBtn:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body class="dashboard">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="logo">ShuttleSys</div>
+
+        <ul class="menu">
+            <!-- Dashboard Link -->
+            <li>
+                <a href="dashboard.html" style="text-decoration:none; color:inherit;">
+                    <strong>Dashboard</strong>
+                </a>
+            </li>
+
+            <!-- Accounts -->
+            <li>
+                <a href="Account.html" style="text-decoration:none; color:inherit;">
+                    Accounts
+                </a>
+            </li>
+
+            <!-- Shuttle Dropdown -->
+            <li>
+                <div class="dropdown-btn" onclick="toggleDropdown('shuttleMenu')">
+                    Shuttle ▾
+                </div>
+
+                <ul class="dropdown-menu" id="shuttleMenu">
+                    <li><a href="shuttle.html?id=1">Shuttle 1</a></li>
+                    <li><a href="shuttle.html?id=2">Shuttle 2</a></li>
+                    <li><a href="shuttle.html?id=3">Shuttle 3</a></li>
+                </ul>
+            </li>
+
+            <!-- Records -->
+            <li>
+                <a href="daily_records.html" style="text-decoration:none; color:inherit;">
+                    Records
+                </a>
+            </li>
+        </ul>
+    </aside>
+
+    <!-- Main Area -->
+    <div class="main">
+
+    <!-- Main Area -->
+    <div class="main">
+
+        <!-- Topbar -->
+        <header class="topbar">
+            <div class="user-dropdown" style="margin-left:auto;">
+                <button class="user-btn" onclick="toggleUserMenu()">John Doe ▾</button>
+                <ul class="user-menu" id="userMenu">
+                    <li><a href="#">Edit Account</a></li>
+                    <li><a href="#">Logout</a></li>
+                </ul>
+            </div>
+        </header>
+
+        <!-- Content -->
+        <main class="content">
+
+            <!-- Export Button -->
+            <div class="top-controls">
+                <button id="exportBtn">Export to Excel</button>
+            </div>
+
+            <!-- Daily Records Table -->
+            <section class="chart-box" id="dailyRecordsSection">
+                <h4>All Records — All Shuttles</h4>
+
+                <table id="dailyRecordsTable">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Time</th>
+                            <th>Shuttle ID</th>
+                            <th>Employee ID</th>
+                        </tr>
+                    </thead>
+                    <tbody id="recordsBody">
+                        <!-- Table starts empty; will be populated dynamically -->
+                    </tbody>
+                </table>
+            </section>
+
+        </main>
+    </div>
+
+    <script>
+        // Sidebar dropdown toggle
+        function toggleDropdown(id) {
+            const menu = document.getElementById(id);
+            menu.style.display = menu.style.display === "block" ? "none" : "block";
+        }
+
+        // User dropdown toggle
+        function toggleUserMenu() {
+            const menu = document.getElementById("userMenu");
+            menu.style.display = menu.style.display === "block" ? "none" : "block";
+        }
+
+        window.addEventListener('click', function(e) {
+            const menu = document.getElementById("userMenu");
+            const button = document.querySelector(".user-btn");
+            if (!button.contains(e.target) && !menu.contains(e.target)) {
+                menu.style.display = 'none';
+            }
+        });
+
+        // Export table to Excel
+        document.getElementById('exportBtn').addEventListener('click', function () {
+            var wb = XLSX.utils.table_to_book(document.getElementById('dailyRecordsTable'), {sheet: "Daily Records"});
+            XLSX.writeFile(wb, "daily_records.xlsx");
+        });
+
+        // Optional: convert 24-hour time to 12-hour AM/PM if adding dynamically
+        function formatTimeToAMPM(time24) {
+            const [hour, minute] = time24.split(':');
+            let h = parseInt(hour, 10);
+            const ampm = h >= 12 ? 'PM' : 'AM';
+            h = h % 12 || 12;
+            return h.toString().padStart(2, '0') + ':' + minute + ' ' + ampm;
+        }
+    </script>
+
+</body>
+</html>

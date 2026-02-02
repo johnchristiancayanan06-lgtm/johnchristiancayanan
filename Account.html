@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Accounts Management</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<body class="dashboard">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="logo">ShuttleSys</div>
+
+        <ul class="menu">
+            <!-- Dashboard Link -->
+            <li>
+                <a href="dashboard.html" style="text-decoration:none; color:inherit;">
+                    <strong>Dashboard</strong>
+                </a>
+            </li>
+
+            <!-- Accounts -->
+            <li>
+                <a href="Account.html" style="text-decoration:none; color:inherit;">
+                    Accounts
+                </a>
+            </li>
+
+            <!-- Shuttle Dropdown -->
+            <li>
+                <div class="dropdown-btn" onclick="toggleDropdown('shuttleMenu')">
+                    Shuttle ▾
+                </div>
+
+                <ul class="dropdown-menu" id="shuttleMenu">
+                    <li><a href="shuttle.html?id=1">Shuttle 1</a></li>
+                    <li><a href="shuttle.html?id=2">Shuttle 2</a></li>
+                    <li><a href="shuttle.html?id=3">Shuttle 3</a></li>
+                </ul>
+            </li>
+
+            <!-- Records -->
+            <li>
+                <a href="daily_records.html" style="text-decoration:none; color:inherit;">
+                    Records
+                </a>
+            </li>
+        </ul>
+    </aside>
+
+    <!-- Main Area -->
+    <div class="main">
+
+<!-- MAIN -->
+<div class="main">
+
+    <!-- TOPBAR -->
+    <header class="topbar">
+        <button class="user-btn">John Doe ▾</button>
+    </header>
+
+    <!-- CONTENT -->
+    <main class="content">
+        <section class="chart-box">
+            <h4>All Accounts</h4>
+
+            <table id="accountsTable">
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Role</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </section>
+    </main>
+</div>
+
+<!-- EDIT MODAL (CENTER) -->
+<div class="modal" id="accountModal">
+    <div class="modal-content">
+        <h3>Edit Account</h3>
+
+        <input type="text" id="username" placeholder="Username">
+        <input type="text" id="role" placeholder="Role">
+
+        <div class="modal-buttons">
+            <button onclick="saveAccount()">Update</button>
+            <button onclick="closeModal()">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<script>
+let accounts = [
+    { username: "admin", role: "Administrator" },
+    { username: "user1", role: "Employee" }
+];
+
+let editIndex = null;
+
+function openModal(index) {
+    editIndex = index;
+    document.getElementById("username").value = accounts[index].username;
+    document.getElementById("role").value = accounts[index].role;
+    document.getElementById("accountModal").style.display = "flex";
+}
+
+function closeModal() {
+    document.getElementById("accountModal").style.display = "none";
+}
+
+function saveAccount() {
+    accounts[editIndex].username = document.getElementById("username").value;
+    accounts[editIndex].role = document.getElementById("role").value;
+    renderAccounts();
+    closeModal();
+}
+
+function deleteAccount(index) {
+    if (confirm("Delete this account?")) {
+        accounts.splice(index, 1);
+        renderAccounts();
+    }
+}
+
+function renderAccounts() {
+    const tbody = document.querySelector("#accountsTable tbody");
+    tbody.innerHTML = "";
+
+    accounts.forEach((acc, index) => {
+        tbody.innerHTML += `
+            <tr>
+                <td>${acc.username}</td>
+                <td>${acc.role}</td>
+                <td>
+                    <button onclick="openModal(${index})">Update</button>
+                    <button class="delete" onclick="deleteAccount(${index})">Delete</button>
+                </td>
+            </tr>
+        `;
+    });
+}
+
+renderAccounts();
+</script>
+
+</body>
+</html>
