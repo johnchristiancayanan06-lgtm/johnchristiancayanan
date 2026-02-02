@@ -128,7 +128,7 @@
 }
 body {
 			font-family: Arial, sans-serif;
-			background: linear-gradient(to top, rgba(0,0,0,0.7), rgba(0,0,0,0.3)), url('styles/bg.webp') center/cover no-repeat;
+			background: linear-gradient(to top, rgba(0,0,0,0.7), rgba(0,0,0,0.3)), url('bg.webp') center/cover no-repeat;
 			background-attachment: fixed;
 			display: flex;
 			justify-content: center;
@@ -174,4 +174,5 @@ body {
 		}
 		.login-container button:hover {
 			background: #0056b3;
+
 		}
