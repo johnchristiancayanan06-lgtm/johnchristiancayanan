@@ -5,64 +5,62 @@
     <title>Accounts Management</title>
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
 
 <body class="dashboard">
 
-    <!-- Sidebar -->
-    <aside class="sidebar">
-        <div class="logo">ShuttleSys</div>
+<!-- SIDEBAR -->
+<aside class="sidebar">
+    <div class="logo">EastWest Shuttle</div>
 
-        <ul class="menu">
-            <!-- Dashboard Link -->
-            <li>
-                <a href="dashboard.html" style="text-decoration:none; color:inherit;">
-                    <strong>Dashboard</strong>
-                </a>
-            </li>
+    <ul class="menu">
+        <li>
+            <a href="dashboard.html"><strong>Dashboard</strong></a>
+        </li>
 
-            <!-- Accounts -->
-            <li>
-                <a href="Account.html" style="text-decoration:none; color:inherit;">
-                    Accounts
-                </a>
-            </li>
+        <li class="active">
+            <a href="accounts.html">Accounts</a>
+        </li>
 
-            <!-- Shuttle Dropdown -->
-            <li>
-                <div class="dropdown-btn" onclick="toggleDropdown('shuttleMenu')">
-                    Shuttle ▾
-                </div>
+        <li>
+            <div class="dropdown-btn" onclick="toggleDropdown('shuttleMenu')">
+                Shuttle ▾
+            </div>
+            <ul class="dropdown-menu" id="shuttleMenu">
+                <li><a href="shuttle.html?id=1">Shuttle 1</a></li>
+                <li><a href="shuttle.html?id=2">Shuttle 2</a></li>
+                <li><a href="shuttle.html?id=3">Shuttle 3</a></li>
+            </ul>
+        </li>
 
-                <ul class="dropdown-menu" id="shuttleMenu">
-                    <li><a href="shuttle.html?id=1">Shuttle 1</a></li>
-                    <li><a href="shuttle.html?id=2">Shuttle 2</a></li>
-                    <li><a href="shuttle.html?id=3">Shuttle 3</a></li>
-                </ul>
-            </li>
-
-            <!-- Records -->
-            <li>
-                <a href="daily_records.html" style="text-decoration:none; color:inherit;">
-                    Records
-                </a>
-            </li>
-        </ul>
-    </aside>
-
-    <!-- Main Area -->
-    <div class="main">
+        <li>
+            <a href="daily_records.html">Records</a>
+        </li>
+    </ul>
+</aside>
 
 <!-- MAIN -->
 <div class="main">
 
     <!-- TOPBAR -->
     <header class="topbar">
-        <button class="user-btn">John Doe ▾</button>
+        <div class="user-dropdown">
+            <button class="user-btn" onclick="toggleUserMenu()">John Doe ▾</button>
+            <ul class="user-menu" id="userMenu">
+                <li>Edit Account</li>
+                <li>Logout</li>
+            </ul>
+        </div>
     </header>
 
     <!-- CONTENT -->
     <main class="content">
+
+        <!-- ADD ACCOUNT BUTTON -->
+        <div class="actions-bar">
+            <button class="primary-btn" onclick="openAddModal()">Add Account</button>
+        </div>
+
+        <!-- ACCOUNTS TABLE -->
         <section class="chart-box">
             <h4>All Accounts</h4>
 
@@ -77,55 +75,81 @@
                 <tbody></tbody>
             </table>
         </section>
+
     </main>
 </div>
 
-<!-- EDIT MODAL (CENTER) -->
-<div class="modal" id="accountModal">
-    <div class="modal-content">
-        <h3>Edit Account</h3>
+<!-- ADD ACCOUNT MODAL -->
+<div class="modal" id="addAccountModal">
+    <div class="auth-card">
+        <h1>Add Account</h1>
 
-        <input type="text" id="username" placeholder="Username">
-        <input type="text" id="role" placeholder="Role">
-
-        <div class="modal-buttons">
-            <button onclick="saveAccount()">Update</button>
-            <button onclick="closeModal()">Cancel</button>
+        <div class="form-group">
+            <label>Username</label>
+            <input type="text" id="addUsername">
         </div>
+
+        <div class="form-group">
+            <label>Role</label>
+            <input type="text" id="addRole">
+        </div>
+
+        <div class="form-group">
+            <label>Password</label>
+            <input type="password" id="addPassword">
+        </div>
+
+        <div class="form-group">
+            <label>Confirm Password</label>
+            <input type="password" id="addConfirmPassword">
+        </div>
+
+        <button class="primary-btn" onclick="addAccount()">Add Account</button>
+        <button class="secondary-btn" onclick="closeAddModal()">Cancel</button>
     </div>
 </div>
 
+<!-- JS -->
 <script>
-let accounts = [
-    { username: "admin", role: "Administrator" },
-    { username: "user1", role: "Employee" }
-];
+let accounts = [];
 
-let editIndex = null;
-
-function openModal(index) {
-    editIndex = index;
-    document.getElementById("username").value = accounts[index].username;
-    document.getElementById("role").value = accounts[index].role;
-    document.getElementById("accountModal").style.display = "flex";
+function toggleDropdown(id) {
+    const menu = document.getElementById(id);
+    menu.style.display = menu.style.display === "block" ? "none" : "block";
 }
 
-function closeModal() {
-    document.getElementById("accountModal").style.display = "none";
+function toggleUserMenu() {
+    const menu = document.getElementById("userMenu");
+    menu.style.display = menu.style.display === "block" ? "none" : "block";
 }
 
-function saveAccount() {
-    accounts[editIndex].username = document.getElementById("username").value;
-    accounts[editIndex].role = document.getElementById("role").value;
-    renderAccounts();
-    closeModal();
+function openAddModal() {
+    document.getElementById("addAccountModal").style.display = "flex";
 }
 
-function deleteAccount(index) {
-    if (confirm("Delete this account?")) {
-        accounts.splice(index, 1);
-        renderAccounts();
+function closeAddModal() {
+    document.getElementById("addAccountModal").style.display = "none";
+}
+
+function addAccount() {
+    const username = document.getElementById("addUsername").value;
+    const role = document.getElementById("addRole").value;
+    const pass = document.getElementById("addPassword").value;
+    const confirm = document.getElementById("addConfirmPassword").value;
+
+    if (!username || !role || !pass || !confirm) {
+        alert("Fill all fields");
+        return;
     }
+
+    if (pass !== confirm) {
+        alert("Passwords do not match");
+        return;
+    }
+
+    accounts.push({ username, role });
+    renderAccounts();
+    closeAddModal();
 }
 
 function renderAccounts() {
@@ -138,7 +162,6 @@ function renderAccounts() {
                 <td>${acc.username}</td>
                 <td>${acc.role}</td>
                 <td>
-                    <button onclick="openModal(${index})">Update</button>
                     <button class="delete" onclick="deleteAccount(${index})">Delete</button>
                 </td>
             </tr>
@@ -146,7 +169,12 @@ function renderAccounts() {
     });
 }
 
-renderAccounts();
+function deleteAccount(index) {
+    if (confirm("Delete account?")) {
+        accounts.splice(index, 1);
+        renderAccounts();
+    }
+}
 </script>
 
 </body>
