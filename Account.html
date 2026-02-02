@@ -5,6 +5,30 @@
     <title>EASTWEST Shuttle</title>
     <link rel="stylesheet" href="style.css">
     <link rel="icon" href="styles/logo.webp" type="image/webp">
+
+    <style>
+        .form-group {
+            position: relative;
+        }
+
+        .form-error {
+            color: #d32f2f;
+            font-size: 0.9rem;
+            margin-top: 0.3rem;
+            display: none;
+        }
+
+        /* Eye icon */
+        .toggle-password {
+            position: absolute;
+            right: 10px;
+            top: 38px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            color: #666;
+            user-select: none;
+        }
+    </style>
 </head>
 
 <body class="dashboard">
@@ -14,13 +38,8 @@
     <div class="logo">EW Shuttle System</div>
 
     <ul class="menu">
-        <li>
-            <a href="dashboard.html"><strong>Dashboard</strong></a>
-        </li>
-
-        <li class="active">
-            <a href="Account.html">Accounts</a>
-        </li>
+        <li><a href="dashboard.html"><strong>Dashboard</strong></a></li>
+        <li class="active"><a href="Account.html">Accounts</a></li>
 
         <li>
             <div class="dropdown-btn" onclick="toggleDropdown('shuttleMenu')">
@@ -33,9 +52,7 @@
             </ul>
         </li>
 
-        <li>
-            <a href="daily_records.html">Records</a>
-        </li>
+        <li><a href="daily_records.html">Records</a></li>
     </ul>
 </aside>
 
@@ -56,12 +73,10 @@
     <!-- CONTENT -->
     <main class="content">
 
-        <!-- ADD ACCOUNT BUTTON -->
         <div class="actions-bar">
             <button class="primary-btn" onclick="openAddModal()">Add Account</button>
         </div>
 
-        <!-- ACCOUNTS TABLE -->
         <section class="chart-box2">
             <h4>All Accounts</h4>
 
@@ -87,7 +102,7 @@
 
         <div class="form-group">
             <label>Username</label>
-            <input type="text" id="addUsername" placeholder="Enter username">
+            <input type="text" id="addUsername">
         </div>
 
         <div class="form-group">
@@ -102,20 +117,21 @@
 
         <div class="form-group">
             <label>Password</label>
-            <input type="password" id="addPassword" placeholder="••••••••">
+            <input type="password" id="addPassword">
+            <span class="toggle-password" onclick="togglePassword('addPassword', this)">👁</span>
         </div>
 
         <div class="form-group">
             <label>Confirm Password</label>
-            <input type="password" id="addConfirmPassword" placeholder="••••••••">
+            <input type="password" id="addConfirmPassword">
+            <span class="toggle-password" onclick="togglePassword('addConfirmPassword', this)">👁</span>
+            <div class="form-error" id="passwordError">Passwords do not match</div>
         </div>
 
         <button class="prime-btn" onclick="addAccount()">Add Account</button>
         <button class="secondary-btn" onclick="closeAddModal()">Cancel</button>
     </div>
 </div>
-
-
 
 <!-- JS -->
 <script>
@@ -137,24 +153,48 @@ function openAddModal() {
 
 function closeAddModal() {
     document.getElementById("addAccountModal").style.display = "none";
+    clearAddForm();
+}
+
+function clearAddForm() {
+    document.getElementById("addUsername").value = "";
+    document.getElementById("addRole").value = "";
+    document.getElementById("addPassword").value = "";
+    document.getElementById("addConfirmPassword").value = "";
+    document.getElementById("passwordError").style.display = "none";
+}
+
+function togglePassword(inputId, icon) {
+    const input = document.getElementById(inputId);
+    if (input.type === "password") {
+        input.type = "text";
+        icon.textContent = "🙈";
+    } else {
+        input.type = "password";
+        icon.textContent = "👁";
+    }
 }
 
 function addAccount() {
-    const username = document.getElementById("addUsername").value;
+    const username = document.getElementById("addUsername").value.trim();
     const role = document.getElementById("addRole").value;
     const pass = document.getElementById("addPassword").value;
     const confirm = document.getElementById("addConfirmPassword").value;
+    const error = document.getElementById("passwordError");
 
     if (!username || !role || !pass || !confirm) {
-        alert("Fill all fields");
+        error.textContent = "All fields are required";
+        error.style.display = "block";
         return;
     }
 
     if (pass !== confirm) {
-        alert("Passwords do not match");
+        error.textContent = "Passwords do not match";
+        error.style.display = "block";
         return;
     }
 
+    error.style.display = "none";
     accounts.push({ username, role });
     renderAccounts();
     closeAddModal();
@@ -171,7 +211,7 @@ function renderAccounts() {
                 <td>${acc.role}</td>
                 <td>
                     <button class="delete" onclick="deleteAccount(${index})">Delete</button>
-                    <button class="update" onclick="updateAccount(${index})">Update</button>
+                    <button class="update">Update</button>
                 </td>
             </tr>
         `;
@@ -184,67 +224,7 @@ function deleteAccount(index) {
         renderAccounts();
     }
 }
-
-let currentIndex = null; // Track which index we are editing
-
-function updateAccount(index) {
-    currentIndex = index;
-    const acc = accounts[index];
-
-    // Populate the modal fields with existing data
-    document.getElementById("editUsername").value = acc.username;
-    document.getElementById("editRole").value = acc.role;
-
-    // Show the modal and overlay
-    document.getElementById("updateModal").style.display = "block";
-    document.getElementById("modalOverlay").style.display = "block";
-}
-
-function saveUpdate() {
-    const newUsername = document.getElementById("editUsername").value;
-    const newRole = document.getElementById("editRole").value;
-
-    if (newUsername.trim() !== "") {
-        // Update the array
-        accounts[currentIndex] = {
-            username: newUsername.trim(),
-            role: newRole
-        };
-
-        closeModal();
-        renderAccounts(); // Refresh the table
-    } else {
-        alert("Username cannot be empty");
-    }
-}
-
-function closeModal() {
-    document.getElementById("updateModal").style.display = "none";
-    document.getElementById("modalOverlay").style.display = "none";
-}
 </script>
-<div id="modalOverlay" onclick="closeModal()"></div>
 
-<div id="updateModal">
-    <h3>Update User</h3>
-    
-    <label for="editUsername">Username</label>
-    <input type="text" id="editUsername">
-
-    <label for="editPassword">New Password</label>
-    <input type="password" id="editPassword" placeholder="Enter new password">
-    
-    <label for="editRole">Role</label>
-    <select id="editRole">
-        <option value="Admin">Admin</option>
-        <option value="Super Admin">Super Admin</option>
-        <option value="Dispatcher">Dispatcher</option>
-    </select>
-    
-    <div class="modal-buttons">
-        <button class="btn-cancel" onclick="closeModal()">Cancel</button>
-        <button class="btn-save" onclick="saveUpdate()">Save Changes</button>
-    </div>
-</div>
 </body>
 </html>
