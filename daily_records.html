@@ -5,16 +5,37 @@
     <title>Daily Records</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+
     <style>
-        /* Top Controls */
         .top-controls {
             display: flex;
-            justify-content: flex-end;
+            justify-content: space-between;
             align-items: center;
             margin-bottom: 15px;
+            gap: 10px;
         }
 
-        #exportBtn {
+        .filter-bar {
+            display: flex;
+            align-items: flex-end;
+            gap: 10px;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            font-size: 14px;
+        }
+
+        .filter-group input {
+            padding: 8px 10px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            cursor: pointer;
+            background: #fff;
+        }
+
+        .primary-btn {
             padding: 8px 16px;
             background: #007bff;
             color: white;
@@ -24,137 +45,185 @@
             font-weight: bold;
         }
 
-        #exportBtn:hover {
-            background: #0056b3;
+        .secondary-btn {
+            padding: 8px 16px;
+            background: #6c757d;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
         }
+
+        .primary-btn:hover { background: #0056b3; }
+        .secondary-btn:hover { background: #5a6268; }
     </style>
 </head>
+
 <body class="dashboard">
 
-    <!-- Sidebar -->
-    <aside class="sidebar">
-        <div class="logo">ShuttleSys</div>
+<!-- SIDEBAR -->
+<aside class="sidebar">
+    <div class="logo">EastWest Shuttle</div>
 
-        <ul class="menu">
-            <!-- Dashboard Link -->
-            <li>
-                <a href="dashboard.html" style="text-decoration:none; color:inherit;">
-                    <strong>Dashboard</strong>
-                </a>
-            </li>
+    <ul class="menu">
+        <li><a href="dashboard.html"><strong>Dashboard</strong></a></li>
+        <li><a href="Account.html">Accounts</a></li>
 
-            <!-- Accounts -->
-            <li>
-                <a href="Account.html" style="text-decoration:none; color:inherit;">
-                    Accounts
-                </a>
-            </li>
+        <li>
+            <div class="dropdown-btn" onclick="toggleDropdown('shuttleMenu')">
+                Shuttle ▾
+            </div>
+            <ul class="dropdown-menu" id="shuttleMenu">
+                <li><a href="shuttle.html?id=1">Shuttle 1</a></li>
+                <li><a href="shuttle.html?id=2">Shuttle 2</a></li>
+                <li><a href="shuttle.html?id=3">Shuttle 3</a></li>
+            </ul>
+        </li>
 
-            <!-- Shuttle Dropdown -->
-            <li>
-                <div class="dropdown-btn" onclick="toggleDropdown('shuttleMenu')">
-                    Shuttle ▾
+        <li><a href="daily_records.html">Records</a></li>
+    </ul>
+</aside>
+
+<!-- MAIN -->
+<div class="main">
+
+    <!-- TOPBAR -->
+    <header class="topbar">
+        <div class="user-dropdown" style="margin-left:auto;">
+            <button class="user-btn" onclick="toggleUserMenu()">John Doe ▾</button>
+            <ul class="user-menu" id="userMenu">
+                <li><a href="#">Edit Account</a></li>
+                <li><a href="#">Logout</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- CONTENT -->
+    <main class="content">
+
+        <!-- FILTER + EXPORT -->
+        <div class="top-controls">
+
+            <div class="filter-bar">
+                <div class="filter-group">
+                    <label>From</label>
+                    <input type="text" id="fromDate" readonly placeholder="January 14 2024" onclick="openPicker('from')">
                 </div>
 
-                <ul class="dropdown-menu" id="shuttleMenu">
-                    <li><a href="shuttle.html?id=1">Shuttle 1</a></li>
-                    <li><a href="shuttle.html?id=2">Shuttle 2</a></li>
-                    <li><a href="shuttle.html?id=3">Shuttle 3</a></li>
-                </ul>
-            </li>
+                <div class="filter-group">
+                    <label>To</label>
+                    <input type="text" id="toDate" readonly placeholder="February 2 2024" onclick="openPicker('to')">
+                </div>
 
-            <!-- Records -->
-            <li>
-                <a href="daily_records.html" style="text-decoration:none; color:inherit;">
-                    Records
-                </a>
-            </li>
-        </ul>
-    </aside>
-
-    <!-- Main Area -->
-    <div class="main">
-
-    <!-- Main Area -->
-    <div class="main">
-
-        <!-- Topbar -->
-        <header class="topbar">
-            <div class="user-dropdown" style="margin-left:auto;">
-                <button class="user-btn" onclick="toggleUserMenu()">John Doe ▾</button>
-                <ul class="user-menu" id="userMenu">
-                    <li><a href="#">Edit Account</a></li>
-                    <li><a href="#">Logout</a></li>
-                </ul>
-            </div>
-        </header>
-
-        <!-- Content -->
-        <main class="content">
-
-            <!-- Export Button -->
-            <div class="top-controls">
-                <button id="exportBtn">Export to Excel</button>
+                <button class="primary-btn" onclick="filterRecords()">Filter</button>
+                <button class="secondary-btn" onclick="clearFilter()">Clear</button>
             </div>
 
-            <!-- Daily Records Table -->
-            <section class="chart-box" id="dailyRecordsSection">
-                <h4>All Records — All Shuttles</h4>
+            <button class="primary-btn" onclick="exportExcel()">Export to Excel</button>
+        </div>
 
-                <table id="dailyRecordsTable">
-                    <thead>
-                        <tr>
-                            <th>Date</th>
-                            <th>Time</th>
-                            <th>Shuttle ID</th>
-                            <th>Employee ID</th>
-                        </tr>
-                    </thead>
-                    <tbody id="recordsBody">
-                        <!-- Table starts empty; will be populated dynamically -->
-                    </tbody>
-                </table>
-            </section>
+        <!-- HIDDEN DATE INPUTS -->
+        <input type="date" id="fromRaw" hidden>
+        <input type="date" id="toRaw" hidden>
 
-        </main>
-    </div>
+        <!-- TABLE -->
+        <section class="chart-box">
+            <h4>All Records — All Shuttles</h4>
 
-    <script>
-        // Sidebar dropdown toggle
-        function toggleDropdown(id) {
-            const menu = document.getElementById(id);
-            menu.style.display = menu.style.display === "block" ? "none" : "block";
-        }
+            <table id="dailyRecordsTable">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Shuttle ID</th>
+                        <th>Employee ID</th>
+                    </tr>
+                </thead>
+                <tbody id="recordsBody">
 
-        // User dropdown toggle
-        function toggleUserMenu() {
-            const menu = document.getElementById("userMenu");
-            menu.style.display = menu.style.display === "block" ? "none" : "block";
-        }
+                    <tr data-date="2024-01-14">
+                        <td>January 14 2024</td>
+                        <td>08:30 AM</td>
+                        <td>Shuttle 1</td>
+                        <td>EMP001</td>
+                    </tr>
 
-        window.addEventListener('click', function(e) {
-            const menu = document.getElementById("userMenu");
-            const button = document.querySelector(".user-btn");
-            if (!button.contains(e.target) && !menu.contains(e.target)) {
-                menu.style.display = 'none';
-            }
-        });
+                    <tr data-date="2024-02-02">
+                        <td>February 2 2024</td>
+                        <td>09:10 AM</td>
+                        <td>Shuttle 2</td>
+                        <td>EMP014</td>
+                    </tr>
 
-        // Export table to Excel
-        document.getElementById('exportBtn').addEventListener('click', function () {
-            var wb = XLSX.utils.table_to_book(document.getElementById('dailyRecordsTable'), {sheet: "Daily Records"});
-            XLSX.writeFile(wb, "daily_records.xlsx");
-        });
+                </tbody>
+            </table>
+        </section>
 
-        // Optional: convert 24-hour time to 12-hour AM/PM if adding dynamically
-        function formatTimeToAMPM(time24) {
-            const [hour, minute] = time24.split(':');
-            let h = parseInt(hour, 10);
-            const ampm = h >= 12 ? 'PM' : 'AM';
-            h = h % 12 || 12;
-            return h.toString().padStart(2, '0') + ':' + minute + ' ' + ampm;
-        }
-    </script>
+    </main>
+</div>
+
+<script>
+function toggleDropdown(id) {
+    const menu = document.getElementById(id);
+    menu.style.display = menu.style.display === "block" ? "none" : "block";
+}
+
+function toggleUserMenu() {
+    const menu = document.getElementById("userMenu");
+    menu.style.display = menu.style.display === "block" ? "none" : "block";
+}
+
+window.addEventListener("click", e => {
+    const btn = document.querySelector(".user-btn");
+    const menu = document.getElementById("userMenu");
+    if (!btn.contains(e.target) && !menu.contains(e.target)) {
+        menu.style.display = "none";
+    }
+});
+
+function openPicker(type) {
+    document.getElementById(type + "Raw").click();
+}
+
+function formatDate(date) {
+    return new Date(date).toLocaleDateString("en-US", {
+        month: "long",
+        day: "numeric",
+        year: "numeric"
+    }).replace(",", "");
+}
+
+fromRaw.onchange = () => fromDate.value = formatDate(fromRaw.value);
+toRaw.onchange = () => toDate.value = formatDate(toRaw.value);
+
+function filterRecords() {
+    const from = fromRaw.value;
+    const to = toRaw.value;
+
+    document.querySelectorAll("#recordsBody tr").forEach(row => {
+        const d = row.dataset.date;
+        row.style.display =
+            (!from || d >= from) && (!to || d <= to)
+                ? ""
+                : "none";
+    });
+}
+
+function clearFilter() {
+    fromRaw.value = toRaw.value = "";
+    fromDate.value = toDate.value = "";
+    document.querySelectorAll("#recordsBody tr").forEach(r => r.style.display = "");
+}
+
+function exportExcel() {
+    const wb = XLSX.utils.table_to_book(
+        document.getElementById("dailyRecordsTable"),
+        { sheet: "Daily Records" }
+    );
+    XLSX.writeFile(wb, "daily_records.xlsx");
+}
+</script>
 
 </body>
 </html>
