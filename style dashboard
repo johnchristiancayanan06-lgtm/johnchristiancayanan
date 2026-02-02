@@ -56,7 +56,7 @@ body {
 
 .sidebar .menu li.active a {
     background: #ddd;
-    border-left: 4px solid #007bff;
+    border-left: 4px solid #0000b8;
     padding-left: 16px;
 }
 
@@ -113,7 +113,7 @@ body {
 }
 
 .user-btn {
-    background: #007bff;
+    background: #0000b8;
     color: #fff;
     border: none;
     padding: 8px 16px;
@@ -196,9 +196,12 @@ body {
 ========================= */
 
 .chart-box {
+    width: 84%;
+    position: absolute;
+    top: 15%;
     background: #fff;
     padding: 20px;
-    border-radius: 6px;
+    border-radius: 10px;
     border: 1px solid #ddd;
 }
 
@@ -229,12 +232,31 @@ tbody tr:hover {
    FORMS / AUTH CARD
 ========================= */
 
+/* Modal Overlay Positioning */
+.modal {
+    display: none; /* Toggle to 'flex' via JS */
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(4px);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
 .auth-card {
     background: #fff;
     width: 420px;
     padding: 32px;
     border-radius: 16px;
     box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+}
+
+.auth-card h1 {
+    margin-top: 0;
+    margin-bottom: 24px;
+    font-size: 24px;
+    color: #1e293b;
 }
 
 .form-group {
@@ -246,27 +268,99 @@ tbody tr:hover {
     font-weight: 600;
     margin-bottom: 6px;
     display: block;
+    color: #475569;
 }
 
-.form-group input {
+/* Unified Style for Input and Select */
+.form-group input, 
+.form-group select {
     width: 100%;
     padding: 12px;
     border-radius: 10px;
     border: 1px solid #cbd5e1;
     font-size: 14px;
+    box-sizing: border-box;
+    transition: border-color 0.2s, box-shadow 0.2s;
 }
 
-.primary-btn,
+.form-group select {
+    appearance: none;
+    background-color: #fff;
+    /* Custom Arrow SVG */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 16px;
+    cursor: pointer;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+/* Button Styling */
 .secondary-btn {
     width: 100%;
     padding: 12px;
     border-radius: 10px;
     font-weight: 600;
     cursor: pointer;
+    border: none;
+    font-family: inherit;
+    font-size: 15px;
+}
+
+.prime-btn {
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    font-family: inherit;
+    font-size: 15px;
+}
+
+.primary-btn {
+    position: absolute;
+    right: 2%;
+    width: 10%;
+    padding: 12px;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    font-family: inherit;
+    font-size: 15px;
+}
+
+.prime-btn {
+    background: #0000b8;
+    color: white;
+    margin-bottom: 12px;
+}
+
+.primary-btn {
+    background: #0000b8;
+    color: white;
+    margin-bottom: 12px;
+}
+
+.prime-btn:hover {
+    background: #1d4ed8;
+}
+
+
+.primary-btn:hover {
+    background: #1d4ed8;
 }
 
 .secondary-btn {
     background: #e5e7eb;
+    color: #4b5563;
 }
 
 .secondary-btn:hover {
@@ -296,6 +390,61 @@ tbody tr:hover {
 #accountsTable button.delete {
     background: #dc3545;
 }
+
+/*update modal button styles*/
+/* The dark background behind the popup */
+#modalOverlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 999;
+}
+
+/* The actual Modal box */
+#updateModal {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #fff;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+    width: 300px;
+    font-family: sans-serif;
+}
+
+#updateModal h3 {
+    margin-top: 0;
+}
+
+#updateModal input, 
+#updateModal select {
+    width: 100%;
+    padding: 8px;
+    margin: 10px 0 20px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box; /* Ensures padding doesn't affect width */
+}
+
+.modal-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.btn-save { background: #28a745; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; }
+.btn-cancel { background: #6c757d; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; }
+
+
+
 
 /* =========================
    MODAL
@@ -382,11 +531,18 @@ tbody tr:hover {
 }
 
 /* FILTER / CLEAR BUTTONS */
-.filter-bar .primary-btn,
 .filter-bar .secondary-btn {
     padding: 8px 14px;
     font-size: 13px;
     width: auto;
+    cursor: pointer;
+}
+
+.filter-bar .filter-btn {
+    padding: 8px 14px;
+    font-size: 13px;
+    width: auto;
+    cursor: pointer;
 }
 
 /* EXPORT BUTTON (SMALL) */
@@ -395,5 +551,20 @@ tbody tr:hover {
     font-size: 13px;
     width: auto;
     height: fit-content;
+    cursor: pointer;
+}
+
+.secondary-btn {
+    background-color: #6c757d;
+    color: white;
+    border: none;
+    border-radius: 4px;
+}
+
+.filter-btn {
+    background-color: #0000b8;
+    color: white;
+    border: none;
+    border-radius: 4px;
 }
 
