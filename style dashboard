@@ -192,13 +192,87 @@ body {
 }
 
 /* =========================
-   TABLE / CHART BOX
+   FOR DASHBOARD / CHART BOX
 ========================= */
 
 .chart-box {
     width: 84%;
     position: absolute;
-    top: 15%;
+    top: 30%;
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+}
+
+.chart-box h4 {
+    margin-bottom: 15px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+thead {
+    background: #f8f8f8;
+}
+
+th, td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+}
+
+tbody tr:hover {
+    background: #f5f5f5;
+}
+
+/* =========================
+   FOR ACCOUNT / CHART BOX
+========================= */
+
+.chart-box2 {
+    width: 80%;
+    position: absolute;
+    top: 18%;
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+}
+
+.chart-box h4 {
+    margin-bottom: 15px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+thead {
+    background: #f8f8f8;
+}
+
+th, td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+}
+
+tbody tr:hover {
+    background: #f5f5f5;
+}
+
+/* =========================
+   FOR ACCOUNT / CHART BOX
+========================= */
+
+.chart-box3 {
+    width: 80%;
+    position: absolute;
+    top: 18%;
     background: #fff;
     padding: 20px;
     border-radius: 10px;
@@ -233,15 +307,24 @@ tbody tr:hover {
 ========================= */
 
 /* Modal Overlay Positioning */
-.modal {
-    display: none; /* Toggle to 'flex' via JS */
+.add-account-modal {
+    display: none; /* stays hidden unless opened */
     position: fixed;
     inset: 0;
-    background: rgba(15, 23, 42, 0.6);
-    backdrop-filter: blur(4px);
-    z-index: 1000;
+    background: rgba(0,0,0,0.5);
     justify-content: center;
     align-items: center;
+    z-index: 1000;
+}
+
+.modal {
+    display: none !important; /* FORCE hidden on page load */
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
 }
 
 .auth-card {
