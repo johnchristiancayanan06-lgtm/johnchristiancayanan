@@ -1,7 +1,6 @@
 <!---FEB 2, 2026-->
 <!--JOHN CHRISTIAN G. CAYANAN-->
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,21 +17,18 @@
         <div class="logo">EW Shuttle System</div>
 
         <ul class="menu">
-            <!-- Dashboard Link -->
             <li>
                 <a href="dashboard.html" style="text-decoration:none; color:inherit;">
                     <strong>Dashboard</strong>
                 </a>
             </li>
 
-            <!-- Accounts -->
             <li>
                 <a href="Account.html" style="text-decoration:none; color:inherit;">
                     Accounts
                 </a>
             </li>
 
-            <!-- Shuttle Dropdown -->
             <li>
                 <div class="dropdown-btn" onclick="toggleDropdown('shuttleMenu')">
                     Shuttle ▾
@@ -45,7 +41,6 @@
                 </ul>
             </li>
             
-            <!-- Records -->
             <li>
                 <a href="daily_records.html" style="text-decoration:none; color:inherit;">
                     Records
@@ -64,16 +59,17 @@
                     John Doe ▾
                 </button>
 
+                <!-- UPDATED USER MENU -->
                 <ul class="user-menu" id="userMenu">
-                    <li><a href="#">Edit Account</a></li>
-                    <li><a href="#">Logout</a></li>
+                    <li>
+                        <a href="login.html" onclick="logout()">Logout</a>
+                    </li>
                 </ul>
             </div>
         </header>
 
         <!-- Content -->
         <main class="content">
-            
 
             <!-- Passenger Count Cards -->
             <section class="cards">
@@ -92,23 +88,24 @@
                     <h2 id="bus3Count">0</h2>
                 </div>
             </section>
+
+            <!-- Shuttle Status Cards -->
             <section class="cards2">
-    <div class="card">
-        <h4>Shuttle 1 Status</h4>
-        <h2 class="status-active">Active</h2>
-    </div>
+                <div class="card">
+                    <h4>Shuttle 1 Status</h4>
+                    <h2 class="status-active">Active</h2>
+                </div>
 
-    <div class="card">
-        <h4>Shuttle 2 Status</h4>
-        <h2 class="status-offline">Offline</h2>
-    </div>
+                <div class="card">
+                    <h4>Shuttle 2 Status</h4>
+                    <h2 class="status-offline">Offline</h2>
+                </div>
 
-    <div class="card">
-        <h4>Shuttle 3 Status</h4>
-        <h2 class="status-active">Active</h2>
-    </div>
-</section>
-
+                <div class="card">
+                    <h4>Shuttle 3 Status</h4>
+                    <h2 class="status-active">Active</h2>
+                </div>
+            </section>
 
             <!-- Today's Passenger Records -->
             <section class="chart-box" id="todayRecordsSection">
@@ -125,7 +122,7 @@
                     </thead>
 
                     <tbody id="todayPassengerTable">
-                        <!-- Today records will appear here -->
+                        <!-- Today records -->
                     </tbody>
                 </table>
             </section>
@@ -143,6 +140,12 @@
         function toggleUserMenu() {
             const menu = document.getElementById("userMenu");
             menu.style.display = menu.style.display === "block" ? "none" : "block";
+        }
+
+        function logout() {
+            localStorage.clear();
+            sessionStorage.clear();
+            window.location.href = "login.html";
         }
 
         window.addEventListener("click", function (e) {
