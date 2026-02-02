@@ -2,8 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Accounts Management</title>
+    <title>EASTWEST Shuttle</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="styles/logo.webp" type="image/webp">
 </head>
 
 <body class="dashboard">
@@ -86,29 +87,33 @@
 
         <div class="form-group">
             <label>Username</label>
-            <input type="text" id="addUsername">
+            <input type="text" id="addUsername" placeholder="Enter username">
         </div>
 
         <div class="form-group">
             <label>Role</label>
-            <input type="text" id="addRole">
+            <select id="addRole">
+                <option value="" disabled selected>Select a role</option>
+                <option value="Admin">Admin</option>
+                <option value="Super Admin">Super Admin</option>
+                <option value="Dispatcher">Dispatcher</option>
+            </select>
         </div>
 
         <div class="form-group">
             <label>Password</label>
-            <input type="password" id="addPassword">
+            <input type="password" id="addPassword" placeholder="••••••••">
         </div>
 
         <div class="form-group">
             <label>Confirm Password</label>
-            <input type="password" id="addConfirmPassword">
+            <input type="password" id="addConfirmPassword" placeholder="••••••••">
         </div>
 
-        <button class="primary-btn" onclick="addAccount()">Add Account</button>
+        <button class="prime-btn" onclick="addAccount()">Add Account</button>
         <button class="secondary-btn" onclick="closeAddModal()">Cancel</button>
     </div>
 </div>
-
 <!-- JS -->
 <script>
 let accounts = [];
@@ -163,6 +168,7 @@ function renderAccounts() {
                 <td>${acc.role}</td>
                 <td>
                     <button class="delete" onclick="deleteAccount(${index})">Delete</button>
+                    <button class="update" onclick="updateAccount(${index})">Update</button>
                 </td>
             </tr>
         `;
@@ -175,7 +181,67 @@ function deleteAccount(index) {
         renderAccounts();
     }
 }
-</script>
 
+let currentIndex = null; // Track which index we are editing
+
+function updateAccount(index) {
+    currentIndex = index;
+    const acc = accounts[index];
+
+    // Populate the modal fields with existing data
+    document.getElementById("editUsername").value = acc.username;
+    document.getElementById("editRole").value = acc.role;
+
+    // Show the modal and overlay
+    document.getElementById("updateModal").style.display = "block";
+    document.getElementById("modalOverlay").style.display = "block";
+}
+
+function saveUpdate() {
+    const newUsername = document.getElementById("editUsername").value;
+    const newRole = document.getElementById("editRole").value;
+
+    if (newUsername.trim() !== "") {
+        // Update the array
+        accounts[currentIndex] = {
+            username: newUsername.trim(),
+            role: newRole
+        };
+
+        closeModal();
+        renderAccounts(); // Refresh the table
+    } else {
+        alert("Username cannot be empty");
+    }
+}
+
+function closeModal() {
+    document.getElementById("updateModal").style.display = "none";
+    document.getElementById("modalOverlay").style.display = "none";
+}
+</script>
+<div id="modalOverlay" onclick="closeModal()"></div>
+
+<div id="updateModal">
+    <h3>Update User</h3>
+    
+    <label for="editUsername">Username</label>
+    <input type="text" id="editUsername">
+
+    <label for="editPassword">New Password</label>
+    <input type="password" id="editPassword" placeholder="Enter new password">
+    
+    <label for="editRole">Role</label>
+    <select id="editRole">
+        <option value="Admin">Admin</option>
+        <option value="Super Admin">Super Admin</option>
+        <option value="Dispatcher">Dispatcher</option>
+    </select>
+    
+    <div class="modal-buttons">
+        <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+        <button class="btn-save" onclick="saveUpdate()">Save Changes</button>
+    </div>
+</div>
 </body>
 </html>
