@@ -237,8 +237,6 @@ body {
 ========================= */
 
 .chart-box {
-    width: 84%;
-    position: absolute;
     top: 50%;
     background: #fff;
     padding: 20px;
@@ -274,8 +272,6 @@ tbody tr:hover {
 ========================= */
 
 .chart-box2 {
-    width: 80%;
-    position: absolute;
     top: 18%;
     background: #fff;
     padding: 20px;
@@ -311,8 +307,6 @@ tbody tr:hover {
 ========================= */
 
 .chart-box3 {
-    width: 80%;
-    position: absolute;
     top: 18%;
     background: #fff;
     padding: 20px;
@@ -448,26 +442,7 @@ tbody tr:hover {
     font-size: 15px;
 }
 
-.primary-btn {
-    position: absolute;
-    right: 2%;
-    width: 10%;
-    padding: 12px;
-    border-radius: 10px;
-    font-weight: 600;
-    cursor: pointer;
-    border: none;
-    font-family: inherit;
-    font-size: 15px;
-}
-
 .prime-btn {
-    background: #0000b8;
-    color: white;
-    margin-bottom: 12px;
-}
-
-.primary-btn {
     background: #0000b8;
     color: white;
     margin-bottom: 12px;
@@ -475,6 +450,49 @@ tbody tr:hover {
 
 .prime-btn:hover {
     background: #1d4ed8;
+}
+
+
+/* 1. The Container: This handles the positioning */
+.actions-bar {
+    display: flex;
+    justify-content: flex-end; /* Pushes the button to the right */
+    width: 100%;
+    padding: 10px 0;
+}
+
+/* 2. The Button: All your styles combined into one block */
+.primary-btn {
+    /* Layout */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 20px;
+    margin-bottom: 12px;
+    
+    /* Style */
+    background: #0000b8;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    
+    /* Typography */
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 600;
+    
+    /* Animation */
+    transition: background 0.2s ease, transform 0.1s ease;
+}
+
+/* 3. Interaction States */
+.primary-btn:hover {
+    background: #1d4ed8;
+}
+
+.primary-btn:active {
+    transform: scale(0.97); /* Gives a "pressed" feel */
 }
 
 
